@@ -146,7 +146,7 @@ autocomplete_light/
 CACHE/
 __MACOSX/
 staticfiles.json
-vendor/
+static/vendor/
 
 # GENERAL PROD STUFF #
 logs/*
