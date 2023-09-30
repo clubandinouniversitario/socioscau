@@ -1,0 +1,69 @@
+# In this file you shouldn't use "" for strings, just write them down in the same format as all the other variables here
+# ====================
+# ENVIRONMENT SETTINGS
+# ====================
+
+# Determine if the server is a production or development server.
+# Don't change it if you don't understand what it is
+IS_PRODUCTION_SERVER=False
+
+# Django debug mode, turn it to True only in production server.
+DEBUG=True
+
+# Secret key for Django to use, change this to a secure, unique, and long string
+DJANGO_SECRET_KEY=
+
+# =================
+# DATABASE SETTINGS
+# =================
+
+# Name of the database
+DB_NAME=
+
+# Database user and password
+DB_USER=
+DB_PASSWORD=
+
+# Host and port for the database, typically localhost and 5432 for PostgreSQL
+DB_HOST=localhost
+DB_PORT=5432
+
+# ==================
+# DJANGO CORE CONFIG
+# ==================
+
+# Hosts that are allowed to connect to this Django instance.
+# Leave it [] if you are working in development.
+ALLOWED_HOSTS=[]
+
+# Whether to compress static files offline. Haven't tested it to True locally so do it under your own risk.
+COMPRESS_OFFLINE=False
+
+# Specifies the style for the compressed output. Options are nested and compressed.
+LIBSASS_OUTPUT_STYLE=nested
+
+# ===================
+# EMAIL CONFIGURATION
+# ===================
+
+# Backend used for sending emails
+EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
+
+# Email host, port, and whether to use TLS. Only for Production.
+EMAIL_HOST=None
+EMAIL_PORT=None
+EMAIL_USE_TLS=None
+
+# Credentials for the email account used to send emails. Only for Production.
+EMAIL_HOST_USER=None
+EMAIL_HOST_PASSWORD=None
+
+# ================
+# CELERY SETTINGS
+# ================
+
+# Broker URL for Celery, typically RabbitMQ
+CELERY_BROKER_URL=amqp://localhost
+
+# Backend used to store task results. Only for Production.
+CELERY_RESULT_BACKEND=None
