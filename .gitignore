@@ -143,9 +143,7 @@ webcau_uwsgi.ini
 # STATIC #
 admin/
 autocomplete_light/
-bootstrap/
 CACHE/
-fa/
 __MACOSX/
 staticfiles.json
 vendor/
