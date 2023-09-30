@@ -1,0 +1,71 @@
+{% extends "headers.html" %}
+{% load static %}
+
+{% block content %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+        <strong {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+  <div class="container justify-content-md-center text-dark">
+    <div class="row">
+      <h4 class="mt-4 mb-3">Amigos</h4>
+    </div>
+    <a class="btn btn-primary" href="{% url 'new_friend' %}">Agregar Amigo</a>
+    <div class="row justify-content-md-center pt-3 pb-3 mt-3 mb-3 rounded" style="overflow-x: auto;">
+      {% if friends.count > 0 %}
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Nombre</th>
+              <th scope="col">Rut</th>
+              <th scope="col">Fecha de Nacimiento</th>
+              <th scope="col">Teléfono</th>
+              <th scope="col">Email</th>
+              <th scope="col">Nombre Contacto Emergencia</th>
+              <th scope="col">Teléfono Contacto Emergencia</th>
+              <th scope="col">Correo Contacto Emergencia</th>
+              <th scope="col">Parentesco Contacto Emergencia</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for friend in friends %}
+              <tr>
+                <td>{{ friend }}</td>
+                <td>{{ friend.rut }}</td>
+                <td>{{ friend.birth_date }}</td>
+                <td>{{ friend.phone_number }}</td>
+                <td>{{ friend.email }}</td>
+                <td>{{ friend.emergencycontact_name }}</td>
+                <td>{{ friend.emergencycontact_phone }}</td>
+                <td>{{ friend.emergencycontact_email }}</td>
+                <td>{{ friend.emergencycontact_relationship }}</td>
+                <td>
+                  <a class="btn btn-light" href="{% url 'edit_friend' friend.id %}" data-toggle="tooltip" data-placement="top" title="Editar Amigo"><i class="bi-pencil-square"></i></a>
+                  <a class="btn btn-light" href="{% url 'delete_friend' friend.id %}" data-toggle="tooltip" data-placement="top" title="Eliminar Amigo"><i class="bi-trash3-fill"></i></a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <div class="alert alert-info" role="alert">
+          <h4 class="alert-heading">No hay amigos registrados</h4>
+          <p>Puedes agregar uno haciendo click en el botón "Agregar Amigo"</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <script>
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+  </script>
+
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "headers_error.html" %}
+
+{% load static %}
+
+{% block content %}
+
+  <img src="{% static 'images/errorcau.png' %}" class="img-fluid mb-5 mt-5" style="max-height: 250px;"/>
+  <h1 class="mb-4">Error 403</h1>
+  <p style="width: 25rem; margin:auto;"> Lamentablemente, debido a las actuales políticas de permisos para usuarios que hemos implementado en este sitio, tu usuario no cuenta con la autorización para acceder, por ahora, a la vista que estabas intentando visualizar. Esto ocurre por varias razones, pero por motivos de espacio no puedo ser específico en ellas así que quédate con que <br><b> tu usuario no tiene permiso para ver esta página.</b>  </p>
+  <a class="btn btn-info" href="{% url 'index' %}" data-toggle="tooltip" data-placement="top" title="Volver al Inicio"><i class="bi bi-house-fill"></i> Volver al Inicio</a>
+{% endblock %}

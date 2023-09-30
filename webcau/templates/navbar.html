@@ -1,0 +1,88 @@
+{% load static %}
+{% if not user.member.main_emergencycontact %}
+  <div class="alert alert-danger" style="margin-bottom: 0px">
+    No has definido a un contacto de emergencia como <strong><a href="{% url 'new_emergencycontact' %}">contacto predeterminado.</a></strong>
+  </div>
+{% endif %}
+{% if user.member.medicalrecord.pending %}
+  <div class="alert alert-danger" style="margin-bottom: 0px">
+      No has completado tu <strong><a href="{% url 'medical_data' %}"> información médica. </a></strong>
+  </div>
+{% endif %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'index' %}">
+        <img src="{% static 'images/logo_socioscau.png' %}" alt="Logo" class="navbar-brand" style="width: 100px">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item dropdown">
+            <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Sistema de Avisos
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="{% url 'avisos:new_shortnotice' %}">Aviso Rápido</a></li>
+              <li><a class="dropdown-item disabled" href="#">Aviso Normal</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="{% url 'avisos:myavisos' %}">Mis Avisos</a></li>
+              <li><a class="dropdown-item" href="{% url 'avisos:avisos' %}">Avisos de Socios</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Beneficios CAU
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="https://docs.google.com/spreadsheets/d/1SHGlBRpMeVnzQUWHv42j0AYobRlDHRl0aLHvDyxGUqA/edit#gid=0">Biblioteca</a></li>
+              <li><a class="dropdown-item" href="https://www.cau.cl/?page_id=3687">Descuentos</a></li>
+              <li><a class="dropdown-item" href="https://www.cau.cl/?page_id=3902">Entrenamientos</a></li>
+              <li><a class="dropdown-item" href="https://www.cau.cl/?page_id=76">Préstamo de Equipo</a></li>
+              <li><a class="dropdown-item" href="https://www.cau.cl/?page_id=4648">InReach</a></li>
+              <li><a class="dropdown-item" href="https://drive.google.com/file/d/123zxL-kwaBIJ4Mvs9v7hWPLNGl0JtHwo/view?usp=sharing">Manual de Socios</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <!--<li><a class="dropdown-item" href="#">Grupos de Whatsapp</a></li>-->
+              <li><a class="dropdown-item" href="https://legend-whimsey-f5a.notion.site/Manual-Sitio-CAU-versi-n-beta-56fd773cab744f2d94adca4baf85d503">Manual del Sitio</a></li>
+            </ul>
+          </li>
+          <!--
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle disabled" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Docencia
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="#">Mis Cursos</a></li>
+              <li><a class="dropdown-item disabled" href="#">Cursos Abiertos</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item disabled" href="#">Material de Cursos? o dejarlo dentro de mis cursos</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" aria-current="page" href="#">Socio</a>
+          </li>
+          -->
+        </ul>
+        <ul class="nav navbar-nav my-2 my-lg-0">
+          {% if user.is_authenticated %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="text-transform: capitalize"> 
+                <i class="fas fa-user-alt"></i> {{ user.username }}
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="{% url 'account_data' %}"></i>Perfil de Usuario</a></li>
+                <li><a class="dropdown-item" href="{% url 'emergencycontacts_data' %}"></i>Contactos de Emergencia</a></li>
+                <li><a class="dropdown-item" href="{% url 'medical_data' %}"></i>Información Médica</a></li>
+                <li><a class="dropdown-item" href="{% url 'cars_data' %}"></i>Vehículo(s)</a></li>
+                <li><a class="dropdown-item" href="{% url 'friends_data' %}"></i>Amigos Externos</a></li>
+                <li><a class="dropdown-item" href="{% url 'logout'%}?next={{request.path}}"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+              </ul>
+            </li>
+          {% else %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'login'%}?next={{request.path}}"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>

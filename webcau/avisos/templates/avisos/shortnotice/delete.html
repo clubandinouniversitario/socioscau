@@ -1,0 +1,31 @@
+{% extends "headers.html" %}
+{% load static %}
+
+{% block content %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+        <strong {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+  <div class="container justify-content-md-center text-dark">
+    <div class="row">
+      <h4 class="mt-4 mb-3">Eliminar aviso</h4>
+    </div>
+    <div class="row">
+      <p class="mt-3" style="width:25rem; margin:auto;">¿Estás seguro que deseas eliminar este aviso de salida?</p>
+    </div>     
+    <div class="row justify-content-md-center rounded text-start mt-5">
+      <div class="form-group" style="width:25rem;">
+        <form method="post" style="text-align: center;">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary mb-3">Confirmar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+    
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "headers.html" %}
+
+{% block content %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+        <strong {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+{% for aviso in active_notices %}
+  {% if aviso.status == 2 %}
+    <div class="card text-center mt-3">
+  {% else %}
+    <div class="card text-center mt-3 text-bg-info">
+  {% endif %}
+      <div class="card-header">
+        Tienes una Salida {% if aviso.status == 2 %} Activa {% else %} ATRASADA {% endif %}
+      </div>
+      <div class="card-body" style="background: white; color: #1c1c1c;">
+        <h5 class="card-title"><a class="" href="{% url 'avisos:detail_notice' aviso.id %}">Aviso de Salida: {{ aviso.shortnotice.location }}</a></h5>
+        <p class="card-text">Si ya llegó la cordada, no te olvides de avisar la llegada.</p>
+        <a class="btn btn-info" href="{% url 'avisos:arrive_shortnotice' aviso.id %}" data-toggle="tooltip" data-placement="top" title="Avisar Llegada"><i class="bi bi-house-fill"></i> Avisar Llegada</a>
+      </div>
+      {% if aviso.status == 2 %}
+        <div class="card-footer text-muted">
+      {% else %}
+        <div class="card-footer text-muted" style="color: white !important;">
+      {% endif %}
+        Llegada Máxima: <h5>{{ aviso.max_end_date|date:"H:i - d/m/Y" }}</h5>
+      </div>
+  </div>
+{% endfor %}
+
+<h1 class="m-4">Accesos Directos</h1>
+  {% if emergencycontacts.count == 0 %}  
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      Recuerda ingresar <strong>al menos un contacto de emergencia</strong> para poder crear tus avisos de salida.
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endif %}
+  {% if member.medicalrecord.pending %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <strong>Recuerda ingresar tu información médica</strong> para poder crear avisos de salida.
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endif %}
+  {% if cars is empty %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <strong>Recuerda ingresar los vehículos que usas</strong> para poder agregarlos a tus avisos de salida.
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endif %}
+<div class="container list-group" style="width:25rem;">
+  <a href="{% url 'avisos:new_shortnotice' %}" class="list-group-item list-group-item-action">Aviso Rápido</a>
+  <a class="list-group-item list-group-item-action disabled">Aviso Largo</a>
+</div>
+
+{% endblock %}

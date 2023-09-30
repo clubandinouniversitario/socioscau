@@ -1,0 +1,28 @@
+{% extends "headers.html" %}
+{% load static %}
+
+{% block content %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+        <strong {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+  <div class="container justify-content-md-center text-dark">
+    <div class="row">
+      <h4 class="mt-4 mb-3">Editar Vehículo</h4>
+    </div>
+    <div class="row justify-content-md-center p-3 m-3 rounded">
+      <div class="form-group" style="width:25rem;">
+        <form method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="btn btn-primary mb-3">Guardar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

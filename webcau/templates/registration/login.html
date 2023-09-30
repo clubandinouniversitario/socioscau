@@ -1,0 +1,48 @@
+{% extends "registration/registration_headers.html" %}
+{% block content %}
+{% load static %}
+  <div class="container login-box" style="width:25rem;">
+    <h2 class="mb-4 mt-5">Iniciar Sesión</h2>
+    {% if form.errors %}
+      <p>Las credenciales de acceso ingresadas no son correctas.</p>
+    {% endif %}
+
+    {% if next %}
+      {% if user.is_authenticated %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+          <strong>Iniciar Sesión!</strong>  Por favor, inicie sesión para acceder.
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <p>Your account doesn't have access to this page. To proceed,
+        please login with an account that has access.</p>
+      {% else %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+          <strong>Iniciar Sesión!</strong>  Por favor, inicie sesión para acceder.
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endif %}
+    {% endif %}
+    <form method="post">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label" >Nombre de Usuario</label>
+        <input type="text" class="form-control" name="username">
+      </div>
+      <div class="mb-5">
+        <label for="exampleInputPassword1" class="form-label" >Contraseña</label>
+        <input type="password" class="form-control" name="password">
+      </div>
+      <button type="submit" class="btn btn-warning mb-3">Iniciar Sesión</button>
+    </form>
+    
+    <p><a href="{% url 'password_reset' %}">¿Resetear contraseña?</a></p>
+
+    <p><a href="https://legend-whimsey-f5a.notion.site/Manual-Sitio-CAU-versi-n-beta-56fd773cab744f2d94adca4baf85d503">Manual de Usuario</a></p>
+
+    <img src="{% static '/images/logoblanco.png'  %}" alt="Logo" class="img-fluid logo-auth">
+  </div>
+
+
+{% endblock %}

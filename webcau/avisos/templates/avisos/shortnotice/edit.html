@@ -1,0 +1,66 @@
+{% extends "headers.html" %}
+{% load static %}
+
+{% block content %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+        <strong {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+  <div class="container justify-content-md-center text-dark">
+    <div class="row">
+      <h4 class="mt-4 mb-3">Editar Aviso Rápido</h4>
+    </div>
+    <div class="row justify-content-md-center p-3 m-3 rounded row-form">
+      <div class="form-group" style="width:25rem;">
+        <form method="post">
+          {% csrf_token %}
+          {% for field in form %}
+              <p style="text-align: left; display: block !important;">
+                {{ field.label_tag }} {% if field.field.required %}<span class="text-danger">*</span> {% endif %}    
+                <span class="field-info"><i class="fa-solid fa-lg fa-circle-question text-info" style="text-align:right;" data-toggle="tooltip" data-placement="top" title="{{ field.field.help_text }}"></i></span>
+                {{ field }}
+              </p>
+          {% endfor%}
+          <table style="display: none">
+            {{ view.formset.empty_form }}
+          </table>
+
+          <table>
+              {{ view.formset }}
+          </table>
+
+          <button type="submit" class="btn btn-primary mb-3">Guardar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+  {{ form.media }}
+
+  <script>
+    (function($) {
+        $('#add-form').click(function() {
+            var index = $('#id_inline_test_models-TOTAL_FORMS').val()
+            var newTable = $('#id_inline_test_models-__prefix__-DELETE').parents('table').clone()
+            newTable.find(':input').each(function() {
+                for (attr of ['name', 'id'])
+                    $(this).attr(
+                        attr,
+                        $(this).attr(attr).replace('__prefix__', index)
+                    )
+            })
+            newTable.insertBefore($(this))
+            $('#id_inline_test_models-TOTAL_FORMS').val(
+                parseInt($('#id_inline_test_models-TOTAL_FORMS').val()) + 1
+            )
+            newTable.slideDown()
+        })
+    })($)
+  </script>
+{% endblock %}

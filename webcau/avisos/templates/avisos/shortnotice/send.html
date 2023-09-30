@@ -1,0 +1,50 @@
+{% extends "headers.html" %}
+{% load static %}
+
+{% block content %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+        <strong {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+  <div class="container justify-content-md-center text-dark">
+    <div class="row">
+      <h4 class="mt-4 mb-3">Enviar Aviso Rápido</h4>
+      <p class="lead">Recomendamos no cambiar las fechas de inicio o término una vez que publicas el aviso, ya que el sistema no funcionará correctamente.</p>
+    </div>
+    <div class="row justify-content-md-center rounded text-start ">
+      <div class="form-group" style="width:25rem;">
+        <form method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="btn btn-primary mb-3">Publicar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+<script>
+    $(function(){
+      $(".email-addresses").multiEmails();
+    });
+
+    $(function(){
+        $("#email-addresses").multiEmails({
+            color:"#343a40",
+            textColor:"#000000"
+        });
+    });
+    
+    $(function(){
+        $("#email-addresses").multiEmails({
+            fontAwesome:true
+        });
+    });
+        
+</script>
+    
+{% endblock %}

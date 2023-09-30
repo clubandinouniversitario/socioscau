@@ -1,0 +1,48 @@
+{% extends "headers.html" %}
+{% load static %}
+
+{% block content %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+        <strong {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+  <div class="container justify-content-md-center text-dark">
+    <div class="row">
+      <h4 class="mt-4 mb-3">Crear Amigo</h4>
+    </div>
+    <div class="row justify-content-md-center p-3 m-3 rounded">
+      <div class="form-group" style="width:25rem;">
+        <form method="post">
+          {% csrf_token %}
+          {{ form.errors }}
+          {% for field in form %}
+            {% if field.type == "hidden" %}
+              {{ field }}
+            {% else %}
+              <div class="form-group mt-3 mb-3">
+                {{ field.field.errors }}
+                {% if field.field.help_text %}
+                  <div class="col-8">
+                    {{ field.label_tag}}{% if field.field.required %}<span class="text-danger">*</span> {% endif %} 
+                  </div>
+                  <div class="col-4">
+                    {{ field }}
+                  </div>
+                {% else %}
+                  {{ field.label_tag}}{% if field.field.required %}<span class="text-danger">*</span> {% endif %} 
+                  {{ field }}
+                {% endif %}
+              </div>
+            {% endif %}
+          {% endfor %}
+          <button type="submit" class="btn btn-primary mb-3">Crear</button>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

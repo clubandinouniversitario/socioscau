@@ -1,0 +1,65 @@
+{% extends "headers.html" %}
+{% load static %}
+
+{% block content %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+        <strong {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+  <div class="container justify-content-md-center text-dark">
+    <div class="row">
+      <h4 class="mt-4 mb-3">Vehículos</h4>
+    </div>
+    <a class="btn btn-primary" href="{% url 'new_car' %}">Agregar Vehículo</a>
+    <div class="row justify-content-md-center pt-3 pb-3 mt-3 mb-3 rounded" style="overflow-x: auto;">
+      {% if cars.count > 0 %}
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Alias</th>
+              <th scope="col">Marca</th>
+              <th scope="col">Modelo</th>
+              <th scope="col">Año</th>
+              <th scope="col">Color</th>
+              <th scope="col">Placa</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for car in cars %}
+              <tr>
+                <td>{{ car.alias }}</td>
+                <td>{{ car.brand }}</td>
+                <td>{{ car.model }}</td>
+                <td>{{ car.year }}</td>
+                <td>{{ car.color }}</td>
+                <td>{{ car.license_plate }}</td>
+                <td>
+                  <a class="btn btn-light" href="{% url 'edit_car' car.id %}" data-toggle="tooltip" data-placement="top" title="Editar Vehículo"><i class="bi-pencil-square"></i></a>
+                  <a class="btn btn-light" href="{% url 'delete_car' car.id %}" data-toggle="tooltip" data-placement="top" title="Eliminar Vehículo"><i class="bi-trash3-fill"></i></a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <div class="alert alert-info" role="alert">
+          <h4 class="alert-heading">No hay vehículos registrados</h4>
+          <p>Puedes agregar uno haciendo click en el botón "Agregar Vehículo"</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <script>
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+  </script>
+
+{% endblock %}

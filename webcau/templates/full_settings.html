@@ -1,0 +1,56 @@
+{% extends "headers.html" %}
+{% load static %}
+
+{% block content %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+        <strong {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+  <div class="container justify-content-md-center text-dark" id="app">
+    <div class="row">
+      <!-- Incluir foto de perfil y posibilidad de cambiarla -->
+      <h4 class="mt-4 mb-3">{{ user.member }}</h4>
+    </div>
+    <div class="row">
+      <div class="list-group list-group-horizontal">
+        <a class="list-group-item flex-fill" :class="activeAccount" @click="changeToAccount" href="#"><i class="fa-solid fa-square-pen" style="font-size: 20px;"></i><p class="mb-1 list-group-item-title">Datos de cuenta</p></a>
+        <a class="list-group-item flex-fill" :class="activePreferences" @click="changeToPreferences" href="#"><i class="fa-solid fa-gear" style="font-size: 20px;"></i><p class="mb-1 list-group-item-title">Preferencias</p></a>
+        <a class="list-group-item flex-fill" :class="activeMedical" @click="changeToMedical" href="#"><i class="fa-solid fa-stethoscope" style="font-size: 20px;"></i><p class="mb-1 list-group-item-title">Datos Médicos</p></a>
+        <a class="list-group-item flex-fill" :class="activeVehicles" @click="changeToVehicles" href="#"><i class="fa-solid fa-car" style="font-size: 20px;"></i><p class="mb-1 list-group-item-title">Vehículos</p></a>
+      </div>
+    </div>
+    <div class="row justify-content-md-center p-3 m-3 bg-light rounded" style="min-height: 400px">
+      <p> [[ title ]] </p>
+      <div class="form-group" style="width:25rem;">
+        <form v-if="account_is_active" method="post">
+          {% csrf_token %}
+          {{ form.account.as_p }}
+          <button type="submit" class="btn btn-primary mb-3">Guardar</button>
+        </form>
+        <form v-if="preferences_is_active" method="post">
+          {% csrf_token %}
+
+          <button type="submit" class="btn btn-primary mb-3">Guardar</button>
+        </form>
+        <form v-if="medical_is_active" method="post">
+          {% csrf_token %}
+          {{ form.edit_medical.as_p }}
+          <button type="submit" class="btn btn-primary mb-3">Guardar</button>
+        </form>
+        <form v-if="vehicles_is_active" method="post">
+
+          <button type="submit" class="btn btn-primary mb-3">Guardar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+<script src="{% static 'js/app.js' %}"></script>
+
+
+{% endblock %}

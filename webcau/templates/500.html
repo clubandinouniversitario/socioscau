@@ -1,0 +1,13 @@
+{% extends "headers_error.html" %}
+
+{% load static %}
+
+{% block content %}
+
+  <img src="{% static 'images/errorcau.png' %}" class="img-fluid mb-5 mt-5" style="max-height: 250px;"/>
+  <h1 class="mt-3">Error 500</h1>
+  <p style="width: 25rem; margin:auto;">
+    Es mi deber informarte que, el servidor tuvo un error y ya nos encargaremos de solucionarlo. Esto ocurre por varias razones, pero por motivos de espacio no puedo ser específico en ellas así que quédate con que <b> "server error".</b> 
+  </p>
+  <a class="btn btn-info" href="{% url 'index' %}" data-toggle="tooltip" data-placement="top" title="Volver al Inicio"><i class="bi bi-house-fill"></i> Volver al Inicio</a>
+{% endblock %}
