@@ -50,6 +50,7 @@ There's a file named env_template.txt in the repository. Make a copy and rename 
 ```
 python manage.py migrate
 python manage.py collectstatic
+python manage.py createsuperuser
 python manage.py runserver
 ```
 
