@@ -1,6 +1,10 @@
 # 🏔️ CAU - Club Andino Universitario Setup Instructions #
-📝 Prerequisites:
-🐍 Python 3.9.6 or higher
+Website for members of [Club Andino Universitario](https://www.cau.cl). Accessible in https://socios.cau.cl
+Main purpose is to manage mountain trips notices or others.
+In the future it's expected to help the management of more functionalities.
+
+## 📝 Prerequisites: ##
+🐍 Python 3.8.9 or higher
 🐘 PostgreSQL
 
 ## 🔧 Installation & Setup:##
