@@ -176,7 +176,7 @@ SESSION_COOKIE_SECURE = False
 # Reset Password
 EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND")
 if os.environ.get("IS_PRODUCTION_SERVER") == "True":
-    EMAIL_HOST = os.environ.get("EMAI_HOST")
+    EMAIL_HOST = os.environ.get("EMAIL_HOST")
     EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
     EMAIL_HOST_PASSWORD = os.environ.get(
         "EMAIL_HOST_PASSWORD"
