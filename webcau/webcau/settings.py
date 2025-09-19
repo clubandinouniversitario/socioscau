@@ -144,18 +144,24 @@ USE_TZ = True
 # Font Awesome
 
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "static/")
-# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = BASE_DIR / "static"
+STATICFILES_DIRS = [BASE_DIR / "static_src"]
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
     "compressor.finders.CompressorFinder",
 ]
-COMPRESS_OFFLINE = os.environ.get("COMPRESS_OFFLINE")
 LIBSASS_OUTPUT_STYLE = os.environ.get("LIBSASS_OUTPUT_STYLE")
-STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 COMPRESS_PRECOMPILERS = (("text/x-scss", "django_libsass.SassCompiler"),)
 
+if DEBUG:
+    COMPRESS_ENABLED = True
+    COMPRESS_OFFLINE = False
+else:
+    # en producción deja compressor offline y manifest storage
+    COMPRESS_ENABLED = True
+    COMPRESS_OFFLINE = True
+    STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
 
 # Media files
 MEDIA_URL = "/media/"

@@ -147,6 +147,9 @@ CACHE/
 __MACOSX/
 staticfiles.json
 static/vendor/
+/static/
+/webcau/static/
+static/CACHE/
 
 # GENERAL PROD STUFF #
 logs/*

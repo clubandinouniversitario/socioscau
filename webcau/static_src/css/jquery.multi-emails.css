@@ -1,0 +1,23 @@
+#show-emails>ul{
+    list-style: none;
+    margin-left: 0;
+    display: inline-block;
+    padding-inline-start: 0;
+    margin-top: 1rem;
+}
+#show-emails>ul>li{
+    padding: 5px 10px;
+    margin-bottom: 3px;
+}
+.remove{
+    padding: 0 .6rem;
+    cursor: pointer;
+    float: right
+}
+.email-error{
+    border: 1px solid #ff0000;
+    background: rgba(255, 0, 0, .08);
+    padding: .7rem;
+    border-radius: 3px;
+    color: #ff0000;
+}
