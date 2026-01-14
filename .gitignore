@@ -150,6 +150,7 @@ static/vendor/
 /static/
 /webcau/static/
 static/CACHE/
+staticfiles/
 
 # GENERAL PROD STUFF #
 logs/*
@@ -161,3 +162,18 @@ __pycache__/
 *.log
 *.csv
 uwsgi_params
+
+
+# ESPECÍFICOS CAU PRODUCCIÓN (HERENCIA DE ANTES, SE ACONSEJA ALGÚN DÍA LIMPIAR EL GITIGNORE CON LO QUE VALGA LA PENA) #
+.env
+
+staticfiles/
+media/
+
+node_modules/
+
+webcau.sock
+webcau_uwsgi.ini
+uwsgi_params
+
+*.csv
