@@ -147,6 +147,13 @@ CACHE/
 __MACOSX/
 staticfiles.json
 static/vendor/
+/static/
+/webcau/static/
+webcau/staticfiles/
+webcau/static__legacy/
+webcau/static/
+static/CACHE/
+staticfiles/
 
 # GENERAL PROD STUFF #
 logs/*
@@ -160,11 +167,6 @@ __pycache__/
 uwsgi_params
 
 
-# Static generado y legacy
-webcau/staticfiles/
-webcau/static__legacy/
-webcau/static/
-
 # Media
 webcau/media/
 
@@ -172,5 +174,19 @@ webcau/media/
 .env
 venv/
 
-# uWSGI
 webcau.sock
+
+# ESPECÍFICOS CAU PRODUCCIÓN (HERENCIA DE ANTES, SE ACONSEJA ALGÚN DÍA LIMPIAR EL GITIGNORE CON LO QUE VALGA LA PENA) #
+.env
+
+staticfiles/
+media/
+
+node_modules/
+
+webcau.sock
+webcau_uwsgi.ini
+uwsgi_params
+
+*.csv
+

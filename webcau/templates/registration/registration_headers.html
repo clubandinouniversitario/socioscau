@@ -13,13 +13,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
         <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
         {% compress css %}
-          <link type="text/x-scss" href="{% static 'bootstrap/bootstrap.scss' %}" rel="stylesheet" media="screen">
-        {% endcompress %}
-        {% compress css %}
-          <link type="text/x-scss" href="{% static 'css/theme.scss' %}" rel="stylesheet" media="screen">
-        {% endcompress %}
-        {% compress css %}
-          <link type="text/x-scss" href="{% static 'css/style.scss' %}" rel="stylesheet" media="screen">
+            <link rel="stylesheet" href="{% static 'scss/custom.scss' %}" type="text/x-scss" media="screen">
         {% endcompress %}
         {% compress js %}
           <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
