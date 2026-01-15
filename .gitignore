@@ -158,3 +158,19 @@ __pycache__/
 *.log
 *.csv
 uwsgi_params
+
+
+# Static generado y legacy
+webcau/staticfiles/
+webcau/static__legacy/
+webcau/static/
+
+# Media
+webcau/media/
+
+# Entorno
+.env
+venv/
+
+# uWSGI
+webcau.sock
