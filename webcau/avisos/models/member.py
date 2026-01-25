@@ -57,16 +57,6 @@ class Member(SoftDeletionModel):
     def main_emergencycontact(self):
         return EmergencyContact.objects.filter(member=self, main_contact=True).first()
 
-@receiver(post_save, sender=User)
-def create_user_member(sender, instance, created, **kwargs):
-    if created:
-        Member.objects.create(user=instance)
-
-@receiver(post_save, sender=User)
-def save_user_member(sender, instance, **kwargs):
-    if hasattr(instance, "member"):
-        instance.member.save()
-
 class ClubBoard(SoftDeletionModel):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
