@@ -5,6 +5,8 @@ from django.dispatch import receiver
 from .base import *
 from .emergencycontact import EmergencyContact
 from phonenumber_field.modelfields import PhoneNumberField
+from django.contrib import admin
+
 
 
 #   Member model. Pending: member status, image, signature, etc.
@@ -27,6 +29,8 @@ class Member(SoftDeletionModel):
         verbose_name = "Socio"
         verbose_name_plural = "Socios"
         ordering = ['name', 'first_surname']
+
+
 
     def get_absolute_url(self):
         return reverse('member-detail', kwargs={'pk': self.pk})

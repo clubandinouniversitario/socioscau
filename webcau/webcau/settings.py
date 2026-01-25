@@ -89,6 +89,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "webcau.wsgi.application"
 
+# Authentication Backends
+AUTHENTICATION_BACKENDS = [
+    'avisos.auth_backends.UsernameOrEmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
