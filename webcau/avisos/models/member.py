@@ -64,7 +64,8 @@ def create_user_member(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def save_user_member(sender, instance, **kwargs):
-    instance.member.save()
+    if hasattr(instance, "member"):
+        instance.member.save()
 
 class ClubBoard(SoftDeletionModel):
     name = models.CharField(max_length=100)
