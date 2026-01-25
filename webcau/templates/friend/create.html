@@ -19,7 +19,11 @@
       <div class="form-group" style="width:25rem;">
         <form method="post">
           {% csrf_token %}
-          {{ form.errors }}
+          {% if form.errors %}
+            <div class="alert alert-danger">
+              Por favor corrige los errores.
+            </div>
+          {% endif %}
           {% for field in form %}
             {% if field.type == "hidden" %}
               {{ field }}

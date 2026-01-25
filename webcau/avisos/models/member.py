@@ -5,6 +5,8 @@ from django.dispatch import receiver
 from .base import *
 from .emergencycontact import EmergencyContact
 from phonenumber_field.modelfields import PhoneNumberField
+from django.contrib import admin
+
 
 
 #   Member model. Pending: member status, image, signature, etc.
@@ -27,6 +29,8 @@ class Member(SoftDeletionModel):
         verbose_name = "Socio"
         verbose_name_plural = "Socios"
         ordering = ['name', 'first_surname']
+
+
 
     def get_absolute_url(self):
         return reverse('member-detail', kwargs={'pk': self.pk})
@@ -56,15 +60,6 @@ class Member(SoftDeletionModel):
     @property
     def main_emergencycontact(self):
         return EmergencyContact.objects.filter(member=self, main_contact=True).first()
-
-@receiver(post_save, sender=User)
-def create_user_member(sender, instance, created, **kwargs):
-    if created:
-        Member.objects.create(user=instance)
-
-@receiver(post_save, sender=User)
-def save_user_member(sender, instance, **kwargs):
-    instance.member.save()
 
 class ClubBoard(SoftDeletionModel):
     name = models.CharField(max_length=100)

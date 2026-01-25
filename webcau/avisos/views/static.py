@@ -46,7 +46,7 @@ class CarsView(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, self.template_name, {'cars': Car.objects.filter(member=request.user.member)})
 
-class UpdateCarView(SuccessMessageMixin, UpdateView):
+class UpdateCarView(ObjectOwnerAuthMixin, SuccessMessageMixin, UpdateView):
     model = Car
     form_class = CarForm
     template_name = 'car/edit.html'
@@ -78,7 +78,7 @@ class EmergencyContactsView(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, self.template_name, {'emergencycontacts': EmergencyContact.objects.filter(member=request.user.member).order_by('-main_contact')})
 
-class UpdateEmergencyContactView(SuccessMessageMixin, UpdateView):
+class UpdateEmergencyContactView(ObjectOwnerAuthMixin, SuccessMessageMixin, UpdateView):
     model = EmergencyContact
     form_class = EmergencyContactForm
     template_name = 'emergencycontact/edit.html'
@@ -111,7 +111,7 @@ class FriendsView(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, self.template_name, {'friends': Friend.objects.filter(member=request.user.member)})
 
-class UpdateFriendView(SuccessMessageMixin, UpdateView):
+class UpdateFriendView(ObjectOwnerAuthMixin, SuccessMessageMixin, UpdateView):
     model = Friend
     form_class = FriendForm
     template_name = 'friend/edit.html'

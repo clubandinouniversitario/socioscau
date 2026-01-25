@@ -9,6 +9,14 @@ from django.contrib.messages.views import SuccessMessageMixin
 from dal import autocomplete
 from django.utils import timezone as tz
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Value, Func
+from django.db.models.functions import Lower, Concat
+
+###############################################################################
+#                    Solo para búsquedas sin acentos en db                    #
+###############################################################################
+class Unaccent(Func):
+    function = 'unaccent'
 
 ###############################################################################
 #                                  Mixins                                     #
@@ -26,16 +34,31 @@ class NoticeSeeAuthMixin(LoginRequiredMixin, UserPassesTestMixin):
 #                         Short Notice Autocompletes                          #
 ###############################################################################
 
+class Unaccent(Func):
+    function = 'unaccent'
+
 class MemberAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        # Don't forget to filter out results depending on the visitor !
         if not self.request.user.is_authenticated:
             return Member.objects.none()
 
         qs = Member.objects.all()
 
         if self.q:
-            qs = qs.filter(name__istartswith=self.q)
+            q = self.q.lower()
+
+            qs = qs.annotate(
+                full_name=Unaccent(
+                    Lower(
+                        Concat(
+                            'name', Value(' '),
+                            'middlename', Value(' '),
+                            'first_surname', Value(' '),
+                            'second_surname'
+                        )
+                    )
+                )
+            ).filter(full_name__contains=q)
 
         return qs
 
@@ -63,7 +86,6 @@ class CarsAutocomplete(autocomplete.Select2QuerySetView):
 
 class FriendsAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        # Don't forget to filter out results depending on the visitor !
         if not self.request.user.is_authenticated:
             return Friend.objects.none()
 
@@ -78,6 +100,21 @@ class FriendsAutocomplete(autocomplete.Select2QuerySetView):
             qs = qs_temp
         else:
             qs = qs.filter(member=self.request.user.member)
+
+        if self.q:
+            q = self.q.lower()
+            qs = qs.annotate(
+                full_name=Unaccent(
+                    Lower(
+                        Concat(
+                            'name', Value(' '),
+                            'middlename', Value(' '),
+                            'first_surname', Value(' '),
+                            'second_surname'
+                        )
+                    )
+                )
+            ).filter(full_name__contains=q)
 
         return qs
 
