@@ -154,6 +154,9 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
     "compressor.finders.CompressorFinder",
 ]
+# STATICFILES_IGNORE_PATTERNS = ["*.map"]
+
+
 LIBSASS_OUTPUT_STYLE = os.environ.get("LIBSASS_OUTPUT_STYLE")
 COMPRESS_PRECOMPILERS = (("text/x-scss", "django_libsass.SassCompiler"),)
 
@@ -164,7 +167,10 @@ else:
     # en producción deja compressor offline y manifest storage
     COMPRESS_ENABLED = True
     COMPRESS_OFFLINE = True
-    STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
+    # STATICFILES_STORAGE = "compressor.storage.CompressorManifestStaticFilesStorage"    
+    # STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
+    STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+
 
 # Media files
 MEDIA_URL = "/media/"
