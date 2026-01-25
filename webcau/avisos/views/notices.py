@@ -9,8 +9,8 @@ from django.contrib.messages.views import SuccessMessageMixin
 from dal import autocomplete
 from django.utils import timezone as tz
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import Value, Func
-from django.db.models.functions import Lower, Concat
+from django.db.models import Value, Func, Q
+from django.db.models.functions import Lower, Concat, Coalesce
 
 ###############################################################################
 #                    Solo para búsquedas sin acentos en db                    #
@@ -42,23 +42,30 @@ class MemberAutocomplete(autocomplete.Select2QuerySetView):
         if not self.request.user.is_authenticated:
             return Member.objects.none()
 
-        qs = Member.objects.all()
-
-        if self.q:
-            q = self.q.lower()
-
-            qs = qs.annotate(
-                full_name=Unaccent(
-                    Lower(
-                        Concat(
-                            'name', Value(' '),
-                            'middlename', Value(' '),
-                            'first_surname', Value(' '),
-                            'second_surname'
-                        )
+        qs = Member.objects.annotate(
+            full_name=Unaccent(
+                Lower(
+                    Concat(
+                        Coalesce("name", Value("")),
+                        Value(" "),
+                        Coalesce("middlename", Value("")),
+                        Value(" "),
+                        Coalesce("first_surname", Value("")),
+                        Value(" "),
+                        Coalesce("second_surname", Value(""))
                     )
                 )
-            ).filter(full_name__contains=q)
+            ),
+            username_norm=Unaccent(Lower("user__username"))
+        )
+
+        if self.q:
+            terms = self.q.lower().split()
+            for term in terms:
+                qs = qs.filter(
+                    Q(full_name__contains=term) |
+                    Q(username_norm__contains=term)
+                )
 
         return qs
 
