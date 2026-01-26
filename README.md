@@ -22,6 +22,17 @@ GRANT ALL PRIVILEGES ON DATABASE your_database_name TO your_user_name;
 ```
 Remember to securely store your database name, user, and password for later use.
 
+
+## PostgreSQL extensions
+
+This project requires the following PostgreSQL extensions:
+
+- unaccent
+
+After creating the database, run:
+
+    CREATE EXTENSION IF NOT EXISTS unaccent;
+
 3. 🍃 Virtual Environment and installing requirements
 A virtual environment is a tool that helps to keep dependencies required by different projects separate by creating isolated Python virtual environments for them.
 Create the virtual environment. We recommend to do this in the root folder (socioscau):
