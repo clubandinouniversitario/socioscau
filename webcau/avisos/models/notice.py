@@ -16,6 +16,9 @@ from reportlab.lib.enums import TA_CENTER
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, Table, TableStyle, HRFlowable, ListFlowable, ListItem, PageBreak
 from reportlab.lib import colors
 from reportlab.pdfbase.pdfmetrics import stringWidth
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.core.mail import EmailMultiAlternatives
 
 def datetime_now_rounder():
     if tz.now().hour == 22:
@@ -553,14 +556,45 @@ class BaseNotice(SoftDeletionModel):
         
         if beta_version:
             mail_content += '\n\n' + 'Esta es una versión beta del sistema de avisos. Si tiene problemas con el sistema, por favor contacte a los administradores.'
+        
+        #######################################
+        # Versión nueva con HTML embellecido
+        #######################################
+        html_content = render_to_string("emails/shortnotice.html", {
+            "notice": self,
+            "mail_content": mail_content,
+        })
+
+        text_content = strip_tags(html_content)
+
+        email = EmailMultiAlternatives(
+            subject=mail_title,
+            body=text_content,
+            from_email=mail_sender,
+            to=list(mail_recipients.values_list("email", flat=True)),
+        )
+
+        email.attach_alternative(html_content, "text/html")
+
+        # Attach PDF if needed
         if publication and self.include_pdf:
             buff = io.BytesIO()
             pdf_name = "Aviso de Salida - " + self.location + ".pdf"
             pdf_name = pdf_name.replace(',', ' - ')
-            doc = self.createPDF(buff, pdf_name)
-            email = EmailMessage(subject=mail_title, body=mail_content, from_email=mail_sender, to=mail_recipients, attachments=[(pdf_name, buff.getvalue(), 'application/pdf')])
-        else:
-            email = EmailMessage(subject=mail_title, body=mail_content, from_email=mail_sender, to=mail_recipients)        
+            self.createPDF(buff, pdf_name)
+            email.attach(pdf_name, buff.getvalue(), "application/pdf")
+
+        #######################################
+        # Versión anterior con texto plano
+        #######################################
+        # if publication and self.include_pdf:
+        #     buff = io.BytesIO()
+        #     pdf_name = "Aviso de Salida - " + self.location + ".pdf"
+        #     pdf_name = pdf_name.replace(',', ' - ')
+        #     doc = self.createPDF(buff, pdf_name)
+        #     email = EmailMessage(subject=mail_title, body=mail_content, from_email=mail_sender, to=mail_recipients, attachments=[(pdf_name, buff.getvalue(), 'application/pdf')])
+        # else:
+        #     email = EmailMessage(subject=mail_title, body=mail_content, from_email=mail_sender, to=mail_recipients)        
 
         email.send()
     
