@@ -19,6 +19,7 @@ from reportlab.pdfbase.pdfmetrics import stringWidth
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.core.mail import EmailMultiAlternatives
+from django.conf import settings
 
 def datetime_now_rounder():
     if tz.now().hour == 22:
@@ -527,14 +528,14 @@ class BaseNotice(SoftDeletionModel):
                 mail_content = mail_content
             else:
                 mail_content = 'Sin contenido.'
-            mail_sender = self.sent_by.user.email
+            mail_sender = settings.DEFAULT_FROM_EMAIL
             mail_recipients = self.email_recipients.all()
         elif late:
             if GlobalSettings.objects.first().notice_late_mail_content:
               mail_content = GlobalSettings.objects.first().notice_late_mail_content
             else:
               mail_content = 'Notificación de salida atrasada respecto a su fecha de llegada máxima. Si la información es errónea, por favor actualizar llegada en el sitio web de socios CAU.'
-            mail_sender = self.sent_by.user.email # O un correo institucional?
+            mail_sender = settings.DEFAULT_FROM_EMAIL
             mail_recipients = self.email_late_alert_recipients.all()
         elif arrival:
             if GlobalSettings.objects.first().notice_arrival_mail_content:
@@ -543,11 +544,11 @@ class BaseNotice(SoftDeletionModel):
               mail_content = 'Notificación de llegada de la cordada.'
             if self.arrival_message:
                 mail_content += '\n\n' + self.arrival_message
-            mail_sender = self.sent_by.user.email # O un correo institucional? O quien notifica?
+            mail_sender = settings.DEFAULT_FROM_EMAIL
             mail_recipients = self.email_recipients.all() # ESTÁ BIEN PORQUE DEBE SER LA MISMA GENTE QUE RECIBIÓ EL AVISO INICIALMENTE
         elif cancel:
             mail_content = 'Salida Cancelada' # Debiera incluirse un texto de llegada? como funcionaría esto?
-            mail_sender = self.sent_by.user.email # O un correo institucional? O quien notifica?
+            mail_sender = settings.DEFAULT_FROM_EMAIL
             mail_recipients = self.email_recipients.all() # ESTÁ BIEN PORQUE DEBE SER LA MISMA GENTE QUE RECIBIÓ EL AVISO INICIALMENTE
         else:
             return
@@ -572,6 +573,7 @@ class BaseNotice(SoftDeletionModel):
             body=text_content,
             from_email=mail_sender,
             to=list(mail_recipients.values_list("email", flat=True)),
+            reply_to=[self.sent_by.user.email] if self.sent_by else None,
         )
 
         email.attach_alternative(html_content, "text/html")
