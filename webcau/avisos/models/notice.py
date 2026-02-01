@@ -513,57 +513,59 @@ class BaseNotice(SoftDeletionModel):
         return doc
 
     def mail(self, publication=False, arrival=False, late=False, cancel=False, mail_content=None):
+        # Esto podríamos sacarlo eventualmente
         beta_version = True
-        mail_title = 'Aviso de Salida Corta: ' + self.location
-        notice_summary = 'Lugar: ' + str(self.location)
-        notice_summary += '\n\nRuta: ' + str(self.route)
-        notice_summary += '\n\nFecha de Salida: ' + str(tz.localtime(self.start_date).strftime('%d-%b-%Y, %H:%M'))
-        notice_summary += '\n\nFecha de Llegada: ' + tz.localtime(self.max_end_date).strftime('%d-%b-%Y, %H:%M')
-        notice_summary += '\n\nParticipantes: ' + str(self.participants_tostring())
-        notice_summary += '\n\nContacto CAU: ' + str(self.cau_contact)
-        notice_summary += '\n\nLink al aviso de salida: https://socios.cau.cl/avisos/' + str(self.id)
 
+        # La idea es que no cambie, para que quede como un "hilo" en el mail
+        mail_title = 'Aviso de Salida Corta: ' + self.location
+
+        #####    Mensaje principal    #####
         if publication:
-            if mail_content:
-                mail_content = mail_content
-            else:
-                mail_content = 'Sin contenido.'
+            main_message = mail_content if mail_content else 'Sin contenido.'
             mail_sender = settings.DEFAULT_FROM_EMAIL
             mail_recipients = self.email_recipients.all()
+            status_type = "publication"
+
         elif late:
             if GlobalSettings.objects.first().notice_late_mail_content:
-              mail_content = GlobalSettings.objects.first().notice_late_mail_content
+                main_message = GlobalSettings.objects.first().notice_late_mail_content
             else:
-              mail_content = 'Notificación de salida atrasada respecto a su fecha de llegada máxima. Si la información es errónea, por favor actualizar llegada en el sitio web de socios CAU.'
+                main_message = 'Notificación de salida atrasada respecto a su fecha de llegada máxima. Si la información es errónea, por favor actualizar llegada en Intranet CAU.'
             mail_sender = settings.DEFAULT_FROM_EMAIL
             mail_recipients = self.email_late_alert_recipients.all()
+            status_type = "late"
+
         elif arrival:
             if GlobalSettings.objects.first().notice_arrival_mail_content:
-              mail_content = GlobalSettings.objects.first().notice_arrival_mail_content
+                main_message = GlobalSettings.objects.first().notice_arrival_mail_content
             else:
-              mail_content = 'Notificación de llegada de la cordada.'
+                main_message = 'Notificación de llegada de la cordada.'
             if self.arrival_message:
-                mail_content += '\n\n' + self.arrival_message
+                main_message += '\n\n' + self.arrival_message
             mail_sender = settings.DEFAULT_FROM_EMAIL
-            mail_recipients = self.email_recipients.all() # ESTÁ BIEN PORQUE DEBE SER LA MISMA GENTE QUE RECIBIÓ EL AVISO INICIALMENTE
+            mail_recipients = self.email_recipients.all()
+            status_type = "arrival"
+
         elif cancel:
-            mail_content = 'Salida Cancelada' # Debiera incluirse un texto de llegada? como funcionaría esto?
+            main_message = 'Salida Cancelada'
             mail_sender = settings.DEFAULT_FROM_EMAIL
-            mail_recipients = self.email_recipients.all() # ESTÁ BIEN PORQUE DEBE SER LA MISMA GENTE QUE RECIBIÓ EL AVISO INICIALMENTE
+            mail_recipients = self.email_recipients.all()
+            status_type = "cancel"
+
         else:
             return
 
-        mail_content += '\n\n' + notice_summary
-        
+        # Info Extra
+        summary = ""
         if beta_version:
-            mail_content += '\n\n' + 'Esta es una versión beta del sistema de avisos. Si tiene problemas con el sistema, por favor contacte a los administradores.'
-        
-        #######################################
-        # Versión nueva con HTML embellecido
-        #######################################
+            summary += 'Esta es una versión beta del sistema de avisos. Si tiene problemas con el sistema, por favor contacte a los administradores.'
+
+        # --- Render HTML ---
         html_content = render_to_string("emails/shortnotice.html", {
             "notice": self,
-            "mail_content": mail_content,
+            "main_message": main_message,
+            "summary": summary,
+            "status_type": status_type,
         })
 
         text_content = strip_tags(html_content)
@@ -578,25 +580,12 @@ class BaseNotice(SoftDeletionModel):
 
         email.attach_alternative(html_content, "text/html")
 
-        # Attach PDF if needed
         if publication and self.include_pdf:
             buff = io.BytesIO()
             pdf_name = "Aviso de Salida - " + self.location + ".pdf"
             pdf_name = pdf_name.replace(',', ' - ')
             self.createPDF(buff, pdf_name)
             email.attach(pdf_name, buff.getvalue(), "application/pdf")
-
-        #######################################
-        # Versión anterior con texto plano
-        #######################################
-        # if publication and self.include_pdf:
-        #     buff = io.BytesIO()
-        #     pdf_name = "Aviso de Salida - " + self.location + ".pdf"
-        #     pdf_name = pdf_name.replace(',', ' - ')
-        #     doc = self.createPDF(buff, pdf_name)
-        #     email = EmailMessage(subject=mail_title, body=mail_content, from_email=mail_sender, to=mail_recipients, attachments=[(pdf_name, buff.getvalue(), 'application/pdf')])
-        # else:
-        #     email = EmailMessage(subject=mail_title, body=mail_content, from_email=mail_sender, to=mail_recipients)        
 
         email.send()
     

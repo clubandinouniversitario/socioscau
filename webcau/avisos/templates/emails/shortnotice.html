@@ -4,33 +4,55 @@
   <table width="100%" style="max-width:600px; margin:auto; background:white; border-radius:6px; padding:20px;">
     <tr>
       <td>
-        <h2 style="margin-top:0;">Aviso de Salida Corta</h2>
 
-        <p><strong>Lugar:</strong> {{ notice.location }}</p>
-        <p><strong>Ruta:</strong> {{ notice.route }}</p>
-        <p><strong>Salida:</strong> {{ notice.start_date|date:"d M Y, H:i" }}</p>
-        <p><strong>Llegada:</strong> {{ notice.max_end_date|date:"d M Y, H:i" }}</p>
-        <p><strong>Participantes:</strong> {{ notice.participants_tostring }}</p>
-        <p><strong>Contacto CAU:</strong> {{ notice.cau_contact }}</p>
+        <!-- Barra de estado -->
+        {% if status_type == "arrival" %}
+          <div style="height:6px; background:#43a047;"></div>
+          <h2>🟢 Llegada registrada</h2>
+        {% elif status_type == "late" %}
+          <div style="height:6px; background:#fb8c00;"></div>
+          <h2>⚠️ Salida atrasada</h2>
+        {% elif status_type == "cancel" %}
+          <div style="height:6px; background:#e53935;"></div>
+          <h2>❌ Salida cancelada</h2>
+        {% else %}
+          <div style="height:6px; background:#1e88e5;"></div>
+          <h2>🏔️ Aviso de Salida</h2>
+        {% endif %}
+
+        <!-- Mensaje principal -->
+        <div style="background:#f5f7fa; padding:12px; border-radius:4px; font-size:15px;">
+          {{ main_message|linebreaks }}
+        </div>
 
         <hr>
 
-        <p>{{ mail_content|linebreaks }}</p>
+        <!-- Datos técnicos -->
+        <h3>Detalles de la salida</h3>
 
-        <p>Para más detalles o para actualizar el aviso, visita el siguiente enlace:</p>
+        <table width="100%" style="font-size:14px;">
+          <tr><td><strong>Lugar:</strong></td><td>{{ notice.location }}</td></tr>
+          <tr><td><strong>Ruta:</strong></td><td>{{ notice.route }}</td></tr>
+          <tr><td><strong>Salida:</strong></td><td>{{ notice.start_date|date:"d M Y, H:i" }}</td></tr>
+          <tr><td><strong>Llegada:</strong></td><td>{{ notice.max_end_date|date:"d M Y, H:i" }}</td></tr>
+          <tr><td><strong>Participantes:</strong></td><td>{{ notice.participants_tostring }}</td></tr>
+          <tr><td><strong>Contacto CAU:</strong></td><td>{{ notice.cau_contact }}</td></tr>
+        </table>
 
         <p style="margin-top:20px;">
           <a href="https://socios.cau.cl/avisos/{{ notice.id }}"
-             style="background:#1e88e5; color:white; padding:10px 15px; text-decoration:none; border-radius:4px;">
+             style="background:#1e88e5; color:white; padding:10px 15px; text-decoration:none; border-radius:4px; display:inline-block; font-weight:bold;">
             Ver aviso en el sitio
           </a>
         </p>
 
+        {% if summary %}
         <hr>
-
         <small style="color:#777;">
-          Esta es una notificación automática del sistema de socios CAU.
+          {{ summary|linebreaks }}
         </small>
+        {% endif %}
+
       </td>
     </tr>
   </table>
