@@ -558,7 +558,7 @@ class BaseNotice(SoftDeletionModel):
         # Info Extra
         summary = ""
         if beta_version:
-            summary += 'Esta es una versión beta del sistema de avisos. Si tiene problemas con el sistema, por favor contacte a los administradores.'
+            summary += 'Esta es una versión beta del sistema de avisos de salida del Club Andino Universitario. Si tiene problemas con el sistema, por favor contacte a los administradores. Por favor, no marcar como spam!!'
 
         # --- Render HTML ---
         html_content = render_to_string("emails/shortnotice.html", {
